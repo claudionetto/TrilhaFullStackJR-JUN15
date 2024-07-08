@@ -117,7 +117,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(UUID id) {
-        findByIdOrThrowException(id);
+        User user = findByIdOrThrowException(id);
+        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
+
         userRepository.deleteById(id);
     }
 
