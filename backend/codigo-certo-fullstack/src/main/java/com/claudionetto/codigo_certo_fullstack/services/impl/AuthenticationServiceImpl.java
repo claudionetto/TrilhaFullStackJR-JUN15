@@ -1,9 +1,11 @@
 package com.claudionetto.codigo_certo_fullstack.services.impl;
 
 import com.claudionetto.codigo_certo_fullstack.config.security.JwtService;
+import com.claudionetto.codigo_certo_fullstack.dtos.mappers.UserMapper;
 import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserAuthenticationRequestDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserRegisterDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserAuthenticationResponseDTO;
+import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserResponseDTO;
 import com.claudionetto.codigo_certo_fullstack.exceptions.UserAlreadyExistsException;
 import com.claudionetto.codigo_certo_fullstack.models.entities.User;
 import com.claudionetto.codigo_certo_fullstack.models.enums.Role;
@@ -14,6 +16,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @RequiredArgsConstructor
 @Service
@@ -63,6 +67,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return UserAuthenticationResponseDTO.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    @Override
+    public UserResponseDTO getCurrentUser(Principal principal) {
+        User user = userRepository.findByUsername(principal.getName()).get();
+        return UserMapper.transformEntityToResponse(user);
     }
 
     private void validateUserRegistration(UserRegisterDTO userRegisterDTO) {
