@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -36,6 +37,7 @@ public class UserProjectController {
     }
 
     @PostMapping
+    @PreAuthorize("#userId == authentication.principal.id")
     public ResponseEntity<Void> saveUserProject(@PathVariable(name = "user-id") UUID userId,
                                                 @RequestBody @Valid ProjectRequestDTO projectRequestDTO){
 
@@ -45,6 +47,7 @@ public class UserProjectController {
     }
 
     @PutMapping("/{project-id}")
+    @PreAuthorize("#userId == authentication.principal.id")
     public ResponseEntity<ProjectResponseDTO> updateUserProject(@PathVariable(name = "user-id") UUID userId,
                                                                 @PathVariable(name = "project-id") Long projectId,
                                                                 @RequestBody @Valid ProjectRequestDTO projectRequestDTO){
@@ -54,6 +57,7 @@ public class UserProjectController {
     }
 
     @DeleteMapping("/{project-id}")
+    @PreAuthorize("#userId == authentication.principal.id")
     public ResponseEntity<Void> updateUserProject(@PathVariable(name = "user-id") UUID userId,
                                                   @PathVariable(name = "project-id") Long projectId){
 
