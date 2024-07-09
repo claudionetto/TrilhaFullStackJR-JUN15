@@ -128,15 +128,6 @@ public class UserServiceImpl implements UserService {
                 new UserNotFoundException("User with ID " + id + " not found"));
     }
 
-    private void validateUserRegistration(UserRegisterDTO userRegisterDTO) {
-        userRepository.findByEmail(userRegisterDTO.email()).ifPresent(userEmail -> {
-            throw new UserAlreadyExistsException("This email is already in use.");
-        });
-
-        userRepository.findByUsername(userRegisterDTO.username()).ifPresent(userName -> {
-            throw new UserAlreadyExistsException("This username is already in use.");
-        });
-    }
     private void validateUserAuthenticatedIsTheSameOfTheIdReceived(User user) {
         String currentUsername = SecurityUtils.getCurrentUsername();
 
