@@ -1,12 +1,10 @@
 package com.claudionetto.codigo_certo_fullstack.services.impl;
 
-import com.claudionetto.codigo_certo_fullstack.config.security.SecurityUtils;
 import com.claudionetto.codigo_certo_fullstack.dtos.mappers.ProjectMapper;
 import com.claudionetto.codigo_certo_fullstack.dtos.requests.ProjectRequestDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.ProjectResponseDTO;
 import com.claudionetto.codigo_certo_fullstack.exceptions.EntityNotFoundException;
 import com.claudionetto.codigo_certo_fullstack.exceptions.ProjectNotBelongToUserException;
-import com.claudionetto.codigo_certo_fullstack.exceptions.ResourceAccessDeniedException;
 import com.claudionetto.codigo_certo_fullstack.exceptions.UserNotFoundException;
 import com.claudionetto.codigo_certo_fullstack.models.entities.Project;
 import com.claudionetto.codigo_certo_fullstack.models.entities.User;

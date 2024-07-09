@@ -1,16 +1,17 @@
 package com.claudionetto.codigo_certo_fullstack.services.impl;
 
 import com.claudionetto.codigo_certo_fullstack.config.security.JwtService;
-import com.claudionetto.codigo_certo_fullstack.config.security.SecurityUtils;
 import com.claudionetto.codigo_certo_fullstack.dtos.mappers.UserMapper;
-import com.claudionetto.codigo_certo_fullstack.dtos.requests.*;
+import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserChangeEmailRequestDTO;
+import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserChangePasswordRequestDTO;
+import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserChangeProfileRequestDTO;
+import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserChangeUsernameRequestDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserChangeEmailResponseDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserChangeUsernameResponseDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserResponseDTO;
-import com.claudionetto.codigo_certo_fullstack.exceptions.ResourceAccessDeniedException;
 import com.claudionetto.codigo_certo_fullstack.exceptions.UserAlreadyExistsException;
-import com.claudionetto.codigo_certo_fullstack.exceptions.UserNotFoundException;
 import com.claudionetto.codigo_certo_fullstack.exceptions.UserIncorrectPasswordException;
+import com.claudionetto.codigo_certo_fullstack.exceptions.UserNotFoundException;
 import com.claudionetto.codigo_certo_fullstack.models.entities.User;
 import com.claudionetto.codigo_certo_fullstack.repositories.UserRepository;
 import com.claudionetto.codigo_certo_fullstack.services.UserService;
@@ -118,13 +119,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User with ID " + id + " not found"));
     }
-
-    private void validateUserAuthenticatedIsTheSameOfTheIdReceived(User user) {
-        String currentUsername = SecurityUtils.getCurrentUsername();
-
-        if (!(user.getUsername().equals(currentUsername))) {
-            throw new ResourceAccessDeniedException("User only can create, update or delete projects with their id");
-        }
-    }
-
 }
