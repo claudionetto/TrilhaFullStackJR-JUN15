@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -39,6 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<UserResponseDTO> update(@RequestBody @Valid UserChangeProfileRequestDTO userDTO,
                                                   @PathVariable(name = "id") UUID id){
 
@@ -47,6 +49,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/password")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<UserResponseDTO> updatePassword(@RequestBody UserChangePasswordRequestDTO userDTO,
                                                           @PathVariable(name = "id") UUID id){
 
@@ -55,6 +58,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/email")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<UserChangeEmailResponseDTO> updateEmail(@RequestBody UserChangeEmailRequestDTO userDTO,
                                                                   @PathVariable(name = "id") UUID id){
 
@@ -63,6 +67,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/username")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<UserChangeUsernameResponseDTO> updateUsername(@RequestBody UserChangeUsernameRequestDTO userDTO,
                                                           @PathVariable(name = "id") UUID id){
 
@@ -71,6 +76,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<Void> deleteById(@PathVariable(name = "id") UUID id){
 
         userService.deleteById(id);
