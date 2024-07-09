@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userChangeEmailRequestDTO.email());
         User userUpdated = userRepository.save(user);
 
-        return UserMapper.transformEntityToUserChangeEmailResponseDTO(user);
+        return UserMapper.transformEntityToUserChangeEmailResponseDTO(userUpdated);
     }
 
     @Override
