@@ -47,8 +47,6 @@ public class UserServiceImpl implements UserService {
 
         User user = findByIdOrThrowException(id);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
-
         if (userChangeProfileRequestDTO.name() != null){
             user.setName(userChangeProfileRequestDTO.name());
         }
@@ -67,8 +65,6 @@ public class UserServiceImpl implements UserService {
 
         User user = findByIdOrThrowException(id);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
-
         if(!(userChangePasswordRequestDTO.newPassword().equals(userChangePasswordRequestDTO.confirmationNewPassword()))){
             throw new UserIncorrectPasswordException("Password confirmation is wrong");
         }
@@ -85,8 +81,6 @@ public class UserServiceImpl implements UserService {
 
         User user = findByIdOrThrowException(id);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
-
         userRepository.findByEmail(userChangeEmailRequestDTO.email()).ifPresent((existingUser) -> {
             throw new UserAlreadyExistsException("This email is already in use");
         });
@@ -102,8 +96,6 @@ public class UserServiceImpl implements UserService {
     public UserChangeUsernameResponseDTO updateUsername(UUID id, UserChangeUsernameRequestDTO userChangeUsernameRequestDTO) {
         User user = findByIdOrThrowException(id);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
-
         userRepository.findByUsername(userChangeUsernameRequestDTO.username()).ifPresent((existingUser) -> {
             throw new UserAlreadyExistsException("This username is already in use");
         });
@@ -118,7 +110,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(UUID id) {
         User user = findByIdOrThrowException(id);
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
 
         userRepository.deleteById(id);
     }
