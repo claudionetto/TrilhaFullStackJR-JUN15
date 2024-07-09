@@ -1,16 +1,17 @@
 package com.claudionetto.codigo_certo_fullstack.services.impl;
 
 import com.claudionetto.codigo_certo_fullstack.config.security.JwtService;
-import com.claudionetto.codigo_certo_fullstack.config.security.SecurityUtils;
 import com.claudionetto.codigo_certo_fullstack.dtos.mappers.UserMapper;
-import com.claudionetto.codigo_certo_fullstack.dtos.requests.*;
+import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserChangeEmailRequestDTO;
+import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserChangePasswordRequestDTO;
+import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserChangeProfileRequestDTO;
+import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserChangeUsernameRequestDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserChangeEmailResponseDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserChangeUsernameResponseDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserResponseDTO;
-import com.claudionetto.codigo_certo_fullstack.exceptions.ResourceAccessDeniedException;
 import com.claudionetto.codigo_certo_fullstack.exceptions.UserAlreadyExistsException;
-import com.claudionetto.codigo_certo_fullstack.exceptions.UserNotFoundException;
 import com.claudionetto.codigo_certo_fullstack.exceptions.UserIncorrectPasswordException;
+import com.claudionetto.codigo_certo_fullstack.exceptions.UserNotFoundException;
 import com.claudionetto.codigo_certo_fullstack.models.entities.User;
 import com.claudionetto.codigo_certo_fullstack.repositories.UserRepository;
 import com.claudionetto.codigo_certo_fullstack.services.UserService;
@@ -47,8 +48,6 @@ public class UserServiceImpl implements UserService {
 
         User user = findByIdOrThrowException(id);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
-
         if (userChangeProfileRequestDTO.name() != null){
             user.setName(userChangeProfileRequestDTO.name());
         }
@@ -67,8 +66,6 @@ public class UserServiceImpl implements UserService {
 
         User user = findByIdOrThrowException(id);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
-
         if(!(userChangePasswordRequestDTO.newPassword().equals(userChangePasswordRequestDTO.confirmationNewPassword()))){
             throw new UserIncorrectPasswordException("Password confirmation is wrong");
         }
@@ -85,8 +82,6 @@ public class UserServiceImpl implements UserService {
 
         User user = findByIdOrThrowException(id);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
-
         userRepository.findByEmail(userChangeEmailRequestDTO.email()).ifPresent((existingUser) -> {
             throw new UserAlreadyExistsException("This email is already in use");
         });
@@ -95,14 +90,12 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userChangeEmailRequestDTO.email());
         User userUpdated = userRepository.save(user);
 
-        return UserMapper.transformEntityToUserChangeEmailResponseDTO(user);
+        return UserMapper.transformEntityToUserChangeEmailResponseDTO(userUpdated);
     }
 
     @Override
     public UserChangeUsernameResponseDTO updateUsername(UUID id, UserChangeUsernameRequestDTO userChangeUsernameRequestDTO) {
         User user = findByIdOrThrowException(id);
-
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
 
         userRepository.findByUsername(userChangeUsernameRequestDTO.username()).ifPresent((existingUser) -> {
             throw new UserAlreadyExistsException("This username is already in use");
@@ -118,7 +111,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(UUID id) {
         User user = findByIdOrThrowException(id);
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
 
         userRepository.deleteById(id);
     }
@@ -127,22 +119,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User with ID " + id + " not found"));
     }
-
-    private void validateUserRegistration(UserRegisterDTO userRegisterDTO) {
-        userRepository.findByEmail(userRegisterDTO.email()).ifPresent(userEmail -> {
-            throw new UserAlreadyExistsException("This email is already in use.");
-        });
-
-        userRepository.findByUsername(userRegisterDTO.username()).ifPresent(userName -> {
-            throw new UserAlreadyExistsException("This username is already in use.");
-        });
-    }
-    private void validateUserAuthenticatedIsTheSameOfTheIdReceived(User user) {
-        String currentUsername = SecurityUtils.getCurrentUsername();
-
-        if (!(user.getUsername().equals(currentUsername))) {
-            throw new ResourceAccessDeniedException("User only can create, update or delete projects with their id");
-        }
-    }
-
 }

@@ -1,12 +1,10 @@
 package com.claudionetto.codigo_certo_fullstack.services.impl;
 
-import com.claudionetto.codigo_certo_fullstack.config.security.SecurityUtils;
 import com.claudionetto.codigo_certo_fullstack.dtos.mappers.ProjectMapper;
 import com.claudionetto.codigo_certo_fullstack.dtos.requests.ProjectRequestDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.ProjectResponseDTO;
 import com.claudionetto.codigo_certo_fullstack.exceptions.EntityNotFoundException;
 import com.claudionetto.codigo_certo_fullstack.exceptions.ProjectNotBelongToUserException;
-import com.claudionetto.codigo_certo_fullstack.exceptions.ResourceAccessDeniedException;
 import com.claudionetto.codigo_certo_fullstack.exceptions.UserNotFoundException;
 import com.claudionetto.codigo_certo_fullstack.models.entities.Project;
 import com.claudionetto.codigo_certo_fullstack.models.entities.User;
@@ -52,8 +50,6 @@ public class UserProjectServiceImpl implements UserProjectService {
         User user = findUserByIdOrThrowException(userId);
         Project project = ProjectMapper.transformRequestToEntity(projectRequestDTO, user);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
-
         Project projectSaved = projectRepository.save(project);
 
         return ProjectMapper.transformEntityToResponse(projectSaved);
@@ -65,7 +61,6 @@ public class UserProjectServiceImpl implements UserProjectService {
         Project project = findProjectByIdOrThrowException(projectId);
         User user = findUserByIdOrThrowException(userId);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
         validateProjectBelongToUserOrThrowException(project, user);
 
         if (projectRequestDTO.name() != null){
@@ -89,7 +84,6 @@ public class UserProjectServiceImpl implements UserProjectService {
         Project project = findProjectByIdOrThrowException(projectId);
         User user = findUserByIdOrThrowException(userId);
 
-        validateUserAuthenticatedIsTheSameOfTheIdReceived(user);
         validateProjectBelongToUserOrThrowException(project, user);
 
         projectRepository.deleteById(projectId);
@@ -109,14 +103,6 @@ public class UserProjectServiceImpl implements UserProjectService {
         if (!(project.getUser().getId().equals(user.getId()))){
             throw new ProjectNotBelongToUserException("The project with id " + project.getId() +
                     " not belong to user with id "+ user.getId());
-        }
-    }
-
-    private void validateUserAuthenticatedIsTheSameOfTheIdReceived(User user) {
-        String currentUsername = SecurityUtils.getCurrentUsername();
-
-        if (!(user.getUsername().equals(currentUsername))) {
-            throw new ResourceAccessDeniedException("User only can create, update or delete projects with their id");
         }
     }
 }

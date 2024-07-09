@@ -4,6 +4,7 @@ import com.claudionetto.codigo_certo_fullstack.config.security.JwtService;
 import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserAuthenticationRequestDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.requests.UserRegisterDTO;
 import com.claudionetto.codigo_certo_fullstack.dtos.responses.UserAuthenticationResponseDTO;
+import com.claudionetto.codigo_certo_fullstack.exceptions.UserAlreadyExistsException;
 import com.claudionetto.codigo_certo_fullstack.models.entities.User;
 import com.claudionetto.codigo_certo_fullstack.models.enums.Role;
 import com.claudionetto.codigo_certo_fullstack.repositories.UserRepository;
@@ -25,6 +26,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public UserAuthenticationResponseDTO register(UserRegisterDTO userRegisterDTO) {
+
+        validateUserRegistration(userRegisterDTO);
 
         User user = User.builder()
                 .name(userRegisterDTO.name())
@@ -60,5 +63,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return UserAuthenticationResponseDTO.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    private void validateUserRegistration(UserRegisterDTO userRegisterDTO) {
+        userRepository.findByEmail(userRegisterDTO.email()).ifPresent(userEmail -> {
+            throw new UserAlreadyExistsException("This email is already in use.");
+        });
+
+        userRepository.findByUsername(userRegisterDTO.username()).ifPresent(userName -> {
+            throw new UserAlreadyExistsException("This username is already in use.");
+        });
     }
 }
