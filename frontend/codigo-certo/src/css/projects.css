@@ -1,0 +1,37 @@
+.projects {
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+button#add-project-button{
+    align-self: flex-end;
+}
+
+h2 {
+    margin-bottom: 8px;
+}
+
+.projects-list {}
+
+.project-card {
+    background-color: rgb(87, 85, 85);
+
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: 1s;
+    margin-bottom: 6px;
+}
+
+.project-card:hover {
+    background-color: rgb(130, 127, 127);
+}
+
+
+.project-card__name {
+    font-size: 16px;
+}
+
