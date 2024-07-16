@@ -1,0 +1,87 @@
+#app {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+main {
+  width: 100%;
+  max-width: 400px;
+  margin: 16px;
+  color: white;
+  background-color: rgb(54, 53, 53);
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0 3px 5px rgba(238, 238, 238, 0.2);
+}
+
+form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+h2 {
+  font-size: 40px;
+  margin-bottom: 24px;
+}
+
+.form-group{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.form-group label {
+  font-size: 16px;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.form-group input:disabled, .form-group select:disabled, .form-group textarea:disabled {
+  background-color: #dad8d8; 
+  border-color: #ccc; 
+  color: black; 
+  cursor: not-allowed;
+}
+
+button {
+  margin-top: 8px;
+  background-color: #e53939;
+  color: white;
+  padding: 12px 40px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition-duration: 1s;
+}
+
+button:hover {
+  background-color: #f81c1c;
+}
+
+p{
+  font-size: 16px;
+}
+
+p a {
+  color: #e53939;
+}
+
+#error-message {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
