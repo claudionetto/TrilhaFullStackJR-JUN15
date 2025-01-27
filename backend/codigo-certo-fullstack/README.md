@@ -119,18 +119,18 @@ A documentação do Swagger fornece detalhes sobre os endpoints da API, incluind
 
 #### User
 
-- **GET** ``/api/auth/users``: Lista todos os usuários
-- **GET** ``/api/auth/users/{user-uuid}``: Busca um usuário pelo uuid
-- **PUT** ``/api/auth/users/{user-uuid}``: Atualiza as informações básicas
-- **PATCH** ``/api/auth/users/{user-uuid}/email``: Altera o email
-- **PATCH** ``/api/auth/users/{user-uuid}/username``: Altera o username
-- **PATCH** ``/api/auth/users/{user-uuid}/password``: Altera o password
-- **DELETE** ``/api/auth/users/{user-uuid}``: Deleta o usuário
+- **GET** ``/api/users``: Lista todos os usuários
+- **GET** ``/api/users/{user-uuid}``: Busca um usuário pelo uuid
+- **PUT** ``/api/users/{user-uuid}``: Atualiza as informações básicas
+- **PATCH** ``/api/users/{user-uuid}/email``: Altera o email
+- **PATCH** ``/api/users/{user-uuid}/username``: Altera o username
+- **PATCH** ``/api/users/{user-uuid}/password``: Altera o password
+- **DELETE** ``/api/users/{user-uuid}``: Deleta o usuário
 
 #### Alguns outros endpoints
 
-- **GET** ``/api/auth/users/{user-uuid}/projects``: Busca os projetos de um usuário
-- **DELETE** ``/api/auth/users/{user-uuid}/projects/{project-id}``: Deleta um projeto do usuário 
+- **GET** ``/api/users/{user-uuid}/projects``: Busca os projetos de um usuário
+- **DELETE** ``/api/users/{user-uuid}/projects/{project-id}``: Deleta um projeto do usuário 
 
 
 ### Exemplos de uso 
